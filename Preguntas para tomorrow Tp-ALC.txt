@@ -1,0 +1,10 @@
+Preguntas para tomorrow Tp-ALC
+
+- Continuamente se nos a presentado con la idea de programar la LU a nuestra manera. Sin embargo, no hemos encontrado una P que satisface el codigo de la inversa, ya que nos hace emplear cosas que no podemos comprender. 
+Que hacemos ahi? En el punto 5 se nos hace plantear la idea de usar Calcula LU como solucion valida para hacer la inversa de B, pero no me parece viable hacer un calculo que ya realizamos de forma precisa en otro caso.
+
+- Volviendo al punto 5, preguntar que quieren decir con tentador? Si la idea nuevamente es distancia, estamos repitiendo el mismo esquema. En que medida basamos preferencia y como podemos encarar ese ejercicio?
+
+- Luego en el punto 6, hay que hacerlo nuevamente en LaTex?, como calculamos el numero de condicion? Lo hacemos con codigo o la idea es a mano?
+
+- Preguntar por sobre los graficos obtenidos en 3 y como es la forma adecuada de resolver el ejercicio. Nosotros tenemos lo que creemos que es solucion, pero estaria bueno ver que opina el profesor.
