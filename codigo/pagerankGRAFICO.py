@@ -158,6 +158,7 @@ m_values = [1, 3, 5, 10]
 
 # Hago un dict de los page rank de los museos con mayor promedio para todos los m
 
+
 page_rank = {
     65:  [0.02212418, 0.02413501, 0.01952598, 0.01697050],
     107: [0.02170588, 0.02352940, 0.02161402, 0.01033586],
@@ -182,6 +183,46 @@ plt.tight_layout()
 
 
 plt.show()
+
+
+#ahora veamos cuando varia alpha:
+    
+
+ASeisSeptimos = construye_adyacencia(D,5) # Construimos la matriz de adyacencia
+
+page_Rankalpha1 = calculo_Page_Rank(ASeisSeptimos, 6/7, 5)
+page_Rankalpha1 = page_Rankalpha1 / np.sum(page_Rankalpha1)
+
+#print (page_Rankalpha1)
+
+
+
+ACuatroQuintos = construye_adyacencia(D,5) # Construimos la matriz de adyacencia
+
+page_Rankalpha2 = calculo_Page_Rank(ACuatroQuintos, 4/5, 5)
+page_Rankalpha2 = page_Rankalpha2 / np.sum(page_Rankalpha2)
+
+#print (page_Rankalpha2)
+
+ADosTercios = construye_adyacencia(D,5) # Construimos la matriz de adyacencia
+
+page_Rankalpha3 = calculo_Page_Rank(ADosTercios, 2/3, 5)
+page_Rankalpha3 = page_Rankalpha3 / np.sum(page_Rankalpha3)
+
+#print (page_Rankalpha3) 
+
+
+AUnMedio = construye_adyacencia(D,5) # Construimos la matriz de adyacencia
+
+page_Rankalpha4 = calculo_Page_Rank(AUnMedio, 1/2, 5)
+page_Rankalpha4 = page_Rankalpha4 / np.sum(page_Rankalpha4)
+
+#print (page_Rankalpha4) 
+
+# me dio fiaca hacer una para cada una de las q faltaba pero las tengo en un doc
+
+
+
 
 
 
