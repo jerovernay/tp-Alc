@@ -27,7 +27,10 @@ def construye_adyacencia(D,m):
 
 # Funcion auxiliar para calcular P sobre el pivoteo parcial 
 
-def construir_P(A):        
+def construir_P(A):
+
+    # A: Matriz de adyacencia
+
     n = A.shape[0]
     P = np.eye(n) # comentar aca
     A_permutada = A.copy()
@@ -69,7 +72,7 @@ def construir_P(A):
 
 def calculaLU(A):
     
-    # matriz es una matriz de NxN
+    # A es una matriz de NxN
     # Retorna la factorización LU a través de una lista con dos matrices L y U de NxN.
     
     P, A_permutada = construir_P(A) #Consigo la P, y en caso de que P != I la A con la filas reordenadas
@@ -121,11 +124,13 @@ def inversa_por_lu(A):
     return A_inv
 
 
-# Fucnion auxiliar para el calculo de K (matriz de grado)
+# Funcion auxiliar para el calculo de K (matriz de grado)
 # Creo K a partir de la matriz A
 
 def crearK (A):
     
+    # A: Matriz de adyacencia
+
     n = A.shape[0]
     m = A.shape[1]
     K = np.zeros((m, n))
@@ -137,8 +142,11 @@ def crearK (A):
     
     return K
 
+
+# Función para calcular la matriz de trancisiones C
+
 def calcula_matriz_C(A): 
-    # Función para calcular la matriz de trancisiones C
+
     # A: Matriz de adyacencia
     # Retorna la matriz C
     
@@ -152,10 +160,10 @@ def calcula_matriz_C(A):
     return C
 
 
-    
+# Función para calcular PageRank usando LU
+
 def calcula_pagerank(A,alpha):
-    
-    # Función para calcular PageRank usando LU
+
     # A: Matriz de adyacencia
     # d: coeficientes de damping
     # Retorna: Un vector p con los coeficientes de page rank de cada museo
@@ -178,7 +186,7 @@ def calcula_pagerank(A,alpha):
     return p
 
 
-# Funcion auxiliar para hace la suma por filas de F
+# Funcion auxiliar para hacer la suma por filas de F
 
 def sumfila(F, i): 
         res = 0
@@ -189,10 +197,12 @@ def sumfila(F, i):
 
         return res
     
+
+# Función para calcular la matriz de trancisiones C
+
 def calcula_matriz_C_continua(D): 
 
-    # Función para calcular la matriz de trancisiones C
-    # A: Matriz de adyacencia
+    # D: Matriz de adyacencia
     # Retorna la matriz C en versión continua
 
     D = D.copy()
