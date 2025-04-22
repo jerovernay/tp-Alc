@@ -188,9 +188,10 @@ def calcula_pagerank(A,alpha):
 
 # Funcion auxiliar para hacer la suma por filas de F
 
-def sumfila(F, i, N): 
+def sumfila(F, i): 
         res = 0
-
+        N = F.shape[0]
+    
         for k in range(1,N):        # nc si este N sale de alguna funcion del notebook, pero hay que definirlo. Pasa abajo tambien
             if k!= i:
                 res = res + F[i,k]
@@ -212,7 +213,7 @@ def calcula_matriz_C_continua(D):
     Kinv = np.zeros((N,N)) # Calcula inversa de la matriz K, que tiene en su diagonal la suma por filas de F
     
     for i in range(N):
-              Kinv[i,i] = sumfila(F, i, N)
+              Kinv[i,i] = sumfila(F, i)
         
     C = Kinv @ F # Calcula C multiplicando Kinv y F
     return C
