@@ -25,53 +25,52 @@ def construye_adyacencia(D,m):
     return(A)
 
 
-#comentar
+# Funcion auxiliar para calcular P sobre el pivoteo parcial 
+
+def construir_P(A):        
+    n = A.shape[0]
+    P = np.eye(n) # comentar aca
+    A_permutada = A.copy()
+    
+    for k in range(n):            
+        #Tomamos los valores de la columna k desde la fila k  hasta el final
+        columna = A_permutada[k:, k]
+    
+        #Hacemos que todos los valores de la columna sean su absoluto
+        largo_columna_abs = np.abs(columna)
+    
+        #Buscamos el indice de la columna al que le pertenece el valor mas grande
+        max_indice_columna = 0
+        maxValor = largo_columna_abs[0]
+    
+        for i in range(1, len(columna)):
+    
+            if largo_columna_abs[i] > maxValor:
+                maxValor = largo_columna_abs[i]
+                max_indice_columna = i
+    
+        #Calculamos el indice correcto de la fila en A
+        p = k + max_indice_columna
+    
+    
+        # Intercambiamos filas en A_permutada y en P si es necesario
+        if p != k:
+    
+            #Intercambiamos en A_copia
+            A_permutada[[k, p], :] = A_permutada[[p, k], :]
+    
+            #Intercambiamos en P
+            P[[k, p], :] = P[[p, k], :]
+    
+    return P, A_permutada
 
 
+# Funcion del calculo de LU
 
 def calculaLU(A):
     
     # matriz es una matriz de NxN
     # Retorna la factorización LU a través de una lista con dos matrices L y U de NxN.
-    
-    def construir_P(A):
-        
-        n = A.shape[0]
-        P = np.eye(n) # comentar aca
-        A_permutada = A.copy()
-    
-        for k in range(n):
-            #Tomamos los valores de la columna k desde la fila k  hasta el final
-            columna = A_permutada[k:, k]
-    
-            #Hacemos que todos los valores de la columna sean su absoluto
-            largo_columna_abs = np.abs(columna)
-    
-            #Buscamos el indice de la columna al que le pertenece el valor mas grande
-            max_indice_columna = 0
-            maxValor = largo_columna_abs[0]
-    
-            for i in range(1, len(columna)):
-    
-                if largo_columna_abs[i] > maxValor:
-                    maxValor = largo_columna_abs[i]
-                    max_indice_columna = i
-    
-            #Calculamos el indice correcto de la fila en A
-            p = k + max_indice_columna
-    
-    
-            # Intercambiamos filas en A_permutada y en P si es necesario
-            if p != k:
-    
-                #Intercambiamos en A_copia
-                A_permutada[[k, p], :] = A_permutada[[p, k], :]
-    
-                #Intercambiamos en P
-                P[[k, p], :] = P[[p, k], :]
-    
-        return P, A_permutada
-    
     
     P, A_permutada = construir_P(A) #Consigo la P, y en caso de que P != I la A con la filas reordenadas
     m = A.shape[0]
@@ -103,9 +102,9 @@ def inversa_por_lu(A):
     # Realizamos la factorización LU de la matriz A
     L, U, P = calculaLU(A)
 
-    # Inicializamos la matriz identidad I
+    # Inicializamos la matriz identidad I y la inversa
     I = np.eye(n)
-    A_inv = np.zeros_like(A, dtype=float) #comentar aca !!!!
+    A_inv = np.zeros_like(A) 
 
     # Resolvemos para cada columna de la matriz inversa
     for i in range(n):
@@ -122,28 +121,26 @@ def inversa_por_lu(A):
     return A_inv
 
 
+# Fucnion auxiliar para el calculo de K (matriz de grado)
+# Creo K a partir de la matriz A
 
+def crearK (A):
+    
+    n = A.shape[0]
+    m = A.shape[1]
+    K = np.zeros((m, n))
+    sumaFilasA = np.sum(A, axis = 1)
+    
+    
+    for i in range (len (sumaFilasA)):
+        K[i, i] = sumaFilasA[i]
+    
+    return K
 
 def calcula_matriz_C(A): 
     # Función para calcular la matriz de trancisiones C
     # A: Matriz de adyacencia
     # Retorna la matriz C
-    
-    
-    # Primero creo K a partir de la matriz A
-
-    def crearK (A):
-    
-        n = A.shape[0]
-        m = A.shape[1]
-        K = np.zeros((m, n))
-        sumaFilasA = np.sum(A, axis = 1)
-    
-    
-        for i in range (len (sumaFilasA)):
-            K[i, i] = sumaFilasA[i]
-    
-        return K
     
     # Nuestra matriz de transicion esta definida por A_traspuesta y K_inv, como nos pide la ecuacion (2)
     
@@ -180,19 +177,24 @@ def calcula_pagerank(A,alpha):
     
     return p
 
-def sumfila(F, i): # Funcion auxiliar para hace la suma por filas de F
+
+# Funcion auxiliar para hace la suma por filas de F
+
+def sumfila(F, i): 
         res = 0
 
-        for k in range(1,N):
+        for k in range(1,N):        # nc si este N sale de alguna funcion del notebook, pero hay que definirlo. Pasa abajo tambien
             if k!= i:
                 res = res + F[i,k]
 
         return res
     
 def calcula_matriz_C_continua(D): 
+
     # Función para calcular la matriz de trancisiones C
     # A: Matriz de adyacencia
     # Retorna la matriz C en versión continua
+
     D = D.copy()
     np.fill_diagonal(D, np.inf)
     F = 1/D
@@ -206,14 +208,16 @@ def calcula_matriz_C_continua(D):
     return C
 
 def calcula_B(C,cantidad_de_visitas):
+
     # Recibe la matriz T de transiciones, y calcula la matriz B que representa la relación entre el total de visitas y el número inicial de visitantes
     # suponiendo que cada visitante realizó cantidad_de_visitas pasos
     # C: Matirz de transiciones
     # cantidad_de_visitas: Cantidad de pasos en la red dado por los visitantes. Indicado como r en el enunciado
     # Retorna:Una matriz B que vincula la cantidad de visitas w con la cantidad de primeras visitas v
+
     n = C.shape[0]
     B = np.eye(n)
-    for k in range(1, cantidad_de_visitas): #Arranca a iterar desde 1 porque B = I = C ^ 0
+    for k in range(1, cantidad_de_visitas):      # Comienza a iterar desde 1 porque B = I = C ^ 0
         C_elevada_k = np.linalg.matrix_power(C,k)
         B = B + C_elevada_k                       # Sumamos las matrices de transición para cada cantidad de pasos
     return B
