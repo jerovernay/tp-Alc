@@ -180,15 +180,29 @@ def calcula_pagerank(A,alpha):
     
     return p
 
+def sumfila(F, i): # Funcion auxiliar para hace la suma por filas de F
+        res = 0
+
+        for k in range(1,N):
+            if k!= i:
+                res = res + F[i,k]
+
+        return res
+    
 def calcula_matriz_C_continua(D): 
     # Función para calcular la matriz de trancisiones C
     # A: Matriz de adyacencia
     # Retorna la matriz C en versión continua
     D = D.copy()
+    np.fill_diagonal(D, np.inf)
     F = 1/D
     np.fill_diagonal(F,0)
-    Kinv = ... # Calcula inversa de la matriz K, que tiene en su diagonal la suma por filas de F 
-    C = ... # Calcula C multiplicando Kinv y F
+    Kinv = np.zeros((N,N)) # Calcula inversa de la matriz K, que tiene en su diagonal la suma por filas de F
+    
+    for i in range(N):
+              Kinv[i,i] = sumfila(F, i)
+        
+    C = Kinv @ F # Calcula C multiplicando Kinv y F
     return C
 
 def calcula_B(C,cantidad_de_visitas):
@@ -197,7 +211,9 @@ def calcula_B(C,cantidad_de_visitas):
     # C: Matirz de transiciones
     # cantidad_de_visitas: Cantidad de pasos en la red dado por los visitantes. Indicado como r en el enunciado
     # Retorna:Una matriz B que vincula la cantidad de visitas w con la cantidad de primeras visitas v
-    B = np.eye(C.shape[0])
-    for i in range(cantidad_de_visitas-1):
-        # Sumamos las matrices de transición para cada cantidad de pasos
+    n = C.shape[0]
+    B = np.eye(n)
+    for k in range(1, cantidad_de_visitas): #Arranca a iterar desde 1 porque B = I = C ^ 0
+        C_elevada_k = np.linalg.matrix_power(C,k)
+        B = B + C_elevada_k                       # Sumamos las matrices de transición para cada cantidad de pasos
     return B
