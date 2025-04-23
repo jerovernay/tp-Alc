@@ -201,21 +201,27 @@ def sumfila(F, i):
 
 # Función para calcular la matriz de trancisiones C
 
-def calcula_matriz_C_continua(D): 
+def calcula_Cji(D, j , i): #Funcion auxiliar para calcular los casilleros Cji
+        N = D.shape[0]
+        num = 1 / D[i,j] #defino el numerador ( F(dij) )
+        den = 0
 
-    # D: Matriz de adyacencia
-    # Retorna la matriz C en versión continua
-    N = D.shape[0]
-    D = D.copy()
-    np.fill_diagonal(D, np.inf)
-    F = 1/D
-    np.fill_diagonal(F,0)
-    Kinv = np.zeros((N,N)) # Calcula inversa de la matriz K, que tiene en su diagonal la suma por filas de F
-    
-    for i in range(N):
-              Kinv[i,i] = sumfila(F, i)
-        
-    C = Kinv @ F # Calcula C multiplicando Kinv y F
+        for k in range(1, N): #armo la sumatoria del denominador
+            if k!= i:
+                den = den + (1 / D[i,k])
+
+        return num / den
+
+def calcula_matriz_C_continua(D):
+
+    n = D.shape[0]
+    C = np.zeros((n,n)) # armo una matriz de ceros para rellenar los casilleros, dejando la diagonal de ceros
+
+    for j in range(n):
+        for i in range(n):
+            if i != j:
+              C[j,i] = calcula_Cji(D, j, i)
+
     return C
 
 def calcula_B(C,cantidad_de_visitas):
