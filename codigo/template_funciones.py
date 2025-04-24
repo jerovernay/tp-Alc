@@ -207,7 +207,7 @@ def calcula_Cji(D, j , i): #Funcion auxiliar para calcular los casilleros Cji
 
 def calcula_matriz_C_continua(D):
 
-    #D: Recibe la matri de distancias
+    #D: Recibe la matriz de distancias
     
     n = D.shape[0]
     C = np.zeros((n,n)) # armo una matriz de ceros para rellenar los casilleros, dejando la diagonal de ceros
