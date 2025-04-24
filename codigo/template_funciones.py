@@ -84,11 +84,11 @@ def calculaLU(A):
         return
     
     U = A_permutada # Comienza siendo una copia de A y deviene en U (triangulado superiormente)
-    L = np.identity(n)  # comentar aca !!!
+    L = np.identity(n)  # Parto desde una matriz identidad de dimension nxn, que va a mutar a L
     
     
 
-    for j in range(n):
+    for j in range(n): 
         for i in range(j+1,n):
             L[i,j] = U[i,j] / U[j,j]
             U[i,:] = U[i,:] - L[i,j] * U[j,:]
@@ -132,8 +132,7 @@ def crearK (A):
     # A: Matriz de adyacencia
 
     n = A.shape[0]
-    m = A.shape[1]
-    K = np.zeros((m, n))
+    K = np.zeros((n, n)) #Armo una matriz de ceros para rellenar sus casilleros
     sumaFilasA = np.sum(A, axis = 1)
     
     
@@ -190,18 +189,26 @@ def calcula_pagerank(A,alpha):
 # Función para calcular la matriz de trancisiones C
 
 def calcula_Cji(D, j , i): #Funcion auxiliar para calcular los casilleros Cji
+    
+    #Recibe la matriz de distancias y las coordenadas del casillero que necesito utilizar para rellenar el casillero en C (con esas mismas coordenadas)
+    
         N = D.shape[0]
+    
+    #Como nos presentacon el casillero como una division, separo procesos entre el numerador y el denominador 
+    
         num = 1 / D[i,j] #defino el numerador ( F(dij) )
         den = 0
 
-        for k in range(1, N): #armo la sumatoria del denominador
-            if k!= i:
+        for k in range(1, N): #Armo la sumatoria del denominador
+            if k!= i: 
                 den = den + (1 / D[i,k])
 
         return num / den
 
 def calcula_matriz_C_continua(D):
 
+    #D: Recibe la matri de distancias
+    
     n = D.shape[0]
     C = np.zeros((n,n)) # armo una matriz de ceros para rellenar los casilleros, dejando la diagonal de ceros
 
