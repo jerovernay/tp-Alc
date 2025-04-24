@@ -186,18 +186,6 @@ def calcula_pagerank(A,alpha):
     return p
 
 
-# Funcion auxiliar para hacer la suma por filas de F
-
-def sumfila(F, i): 
-        res = 0
-        N = F.shape[0]
-    
-        for k in range(1,N):        # nc si este N sale de alguna funcion del notebook, pero hay que definirlo. Pasa abajo tambien
-            if k!= i:
-                res = res + F[i,k]
-
-        return res
-    
 
 # Función para calcular la matriz de trancisiones C
 
