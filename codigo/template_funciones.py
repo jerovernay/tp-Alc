@@ -233,3 +233,13 @@ def calcula_B(C,cantidad_de_visitas):
         C_elevada_k = np.linalg.matrix_power(C,k)
         B = B + C_elevada_k                       # Sumamos las matrices de transición para cada cantidad de pasos
     return B
+
+#Funcion para calcular en numero Condicion de normal 1 de B
+def nro_condicion_norma1(B):
+
+    B_inv = inversa_por_lu(B)
+
+    norma1_de_B = np.linalg.norm(B, 1)
+    norma1_de_B_inv = np.linalg.norm(B_inv, 1)
+
+    return norma1_de_B * norma1_de_B_inv
