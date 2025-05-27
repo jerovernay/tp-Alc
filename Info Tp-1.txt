@@ -1,0 +1,70 @@
+Info Tp enunciado
+
+Se construye la Red con la idea de estudiar los potenciales viajes de los visitants de un museo al otro, teniendo en cuenta su ubicacion geografica.
+
+
+
+Representación matemática
+
+	C = A(traspuesta, matriz de adyacencia) x K(inversa, matriz de grado)
+
+
+Matriz de adyacencia (A): 
+- Matriz de N×N (N = número de museos)
+
+A_ij = 1 si el museo j está entre los 3 más cercanos al museo i
+A_ij = 0 en caso contrario
+
+Es una red dirigida (A no es simétrica en general)
+
+
+Matriz de grado (K): 
+- Matriz diagonal donde:
+
+K_ii = suma de la fila i de A (Σ A_ih para todo h)
+K_ij = 0 para i ≠ j
+
+
+Matriz de transiciones (C):
+
+C = A^T × K^-1 (A transpuesta multiplicada por K inversa)
+Es una matriz estocástica (columnas suman 1)
+C_ji representa la probabilidad de moverse al museo j después de visitar el museo i
+
+Evolución de distribuciones
+
+Si v₀ es el vector que representa la distribución inicial de visitantes:
+
+v₁ = C × v₀ representa la distribución esperada después de un paso
+v_k = C^k × v₀ representa la distribución después de k pasos
+
+
+
+Page Rank
+
+- Si α = 0: p = Cp, donde p_j = Σ(C_ji × p_i) → relevancia basada solo en conexiones
+
+- α > 0: representa probabilidad de interrumpir recorrido y comenzar en otro museo aleatorio
+
+- Vector p: representa la distribución de probabilidad de encontrarse en cada museo después de un largo recorrido
+
+- 1/α: aproximadamente igual al número promedio de museos visitados durante una noche
+
+
+
+Matriz de transiciones generalizada
+
+Alternativa más realista: considerar que visitantes pueden moverse entre cualquier par de museos
+La probabilidad de transición depende de la distancia entre museos
+
+	Fórmula: C_ji = P(i→j) = f(d_ij)/Σ_k f(d_ik)
+
+
+- Para el TP se usa f(d_ji) = d^(-1)_ji (decaimiento lineal con la distancia) 
+
+- Esto genera una matriz C donde todas las transiciones tienen alguna probabilidad (la mayoria de sus elementos son distintos de cero)
+
+- Representa una red pesada donde los elementos de la matriz de adyacencia = 1/d_ij
+
+- C_ii = 0 (no hay transiciones de un museo a sí mismo)
+
