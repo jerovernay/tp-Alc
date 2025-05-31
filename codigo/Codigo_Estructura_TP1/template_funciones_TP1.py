@@ -25,49 +25,6 @@ def construye_adyacencia(D,m):
     return(A)
 
 
-# Funcion auxiliar para calcular P sobre el pivoteo parcial 
-
-# def construir_P(A):
-
-#     # A: Matriz de adyacencia
-
-#     n = A.shape[0]
-#     P = np.eye(n) # comentar aca
-#     A_permutada = A.copy()
-    
-#     for k in range(n):            
-#         #Tomamos los valores de la columna k desde la fila k  hasta el final
-#         columna = A_permutada[k:, k]
-    
-#         #Hacemos que todos los valores de la columna sean su absoluto
-#         largo_columna_abs = np.abs(columna)
-    
-#         #Buscamos el indice de la columna al que le pertenece el valor mas grande
-#         max_indice_columna = 0
-#         maxValor = largo_columna_abs[0]
-    
-#         for i in range(1, len(columna)):
-    
-#             if largo_columna_abs[i] > maxValor:
-#                 maxValor = largo_columna_abs[i]
-#                 max_indice_columna = i
-    
-#         #Calculamos el indice correcto de la fila en A
-#         p = k + max_indice_columna
-    
-    
-#         # Intercambiamos filas en A_permutada y en P si es necesario
-#         if p != k:
-    
-#             #Intercambiamos en A_copia
-#             A_permutada[[k, p], :] = A_permutada[[p, k], :]
-    
-#             #Intercambiamos en P
-#             P[[k, p], :] = P[[p, k], :]
-    
-#     return P, A_permutada
-
-
 # Funcion del calculo de LU
 
 def calculaLU(A):
