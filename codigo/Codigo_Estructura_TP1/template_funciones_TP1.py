@@ -27,45 +27,45 @@ def construye_adyacencia(D,m):
 
 # Funcion auxiliar para calcular P sobre el pivoteo parcial 
 
-def construir_P(A):
+# def construir_P(A):
 
-    # A: Matriz de adyacencia
+#     # A: Matriz de adyacencia
 
-    n = A.shape[0]
-    P = np.eye(n) # comentar aca
-    A_permutada = A.copy()
+#     n = A.shape[0]
+#     P = np.eye(n) # comentar aca
+#     A_permutada = A.copy()
     
-    for k in range(n):            
-        #Tomamos los valores de la columna k desde la fila k  hasta el final
-        columna = A_permutada[k:, k]
+#     for k in range(n):            
+#         #Tomamos los valores de la columna k desde la fila k  hasta el final
+#         columna = A_permutada[k:, k]
     
-        #Hacemos que todos los valores de la columna sean su absoluto
-        largo_columna_abs = np.abs(columna)
+#         #Hacemos que todos los valores de la columna sean su absoluto
+#         largo_columna_abs = np.abs(columna)
     
-        #Buscamos el indice de la columna al que le pertenece el valor mas grande
-        max_indice_columna = 0
-        maxValor = largo_columna_abs[0]
+#         #Buscamos el indice de la columna al que le pertenece el valor mas grande
+#         max_indice_columna = 0
+#         maxValor = largo_columna_abs[0]
     
-        for i in range(1, len(columna)):
+#         for i in range(1, len(columna)):
     
-            if largo_columna_abs[i] > maxValor:
-                maxValor = largo_columna_abs[i]
-                max_indice_columna = i
+#             if largo_columna_abs[i] > maxValor:
+#                 maxValor = largo_columna_abs[i]
+#                 max_indice_columna = i
     
-        #Calculamos el indice correcto de la fila en A
-        p = k + max_indice_columna
+#         #Calculamos el indice correcto de la fila en A
+#         p = k + max_indice_columna
     
     
-        # Intercambiamos filas en A_permutada y en P si es necesario
-        if p != k:
+#         # Intercambiamos filas en A_permutada y en P si es necesario
+#         if p != k:
     
-            #Intercambiamos en A_copia
-            A_permutada[[k, p], :] = A_permutada[[p, k], :]
+#             #Intercambiamos en A_copia
+#             A_permutada[[k, p], :] = A_permutada[[p, k], :]
     
-            #Intercambiamos en P
-            P[[k, p], :] = P[[p, k], :]
+#             #Intercambiamos en P
+#             P[[k, p], :] = P[[p, k], :]
     
-    return P, A_permutada
+#     return P, A_permutada
 
 
 # Funcion del calculo de LU
@@ -75,7 +75,6 @@ def calculaLU(A):
     # A es una matriz de NxN
     # Retorna la factorización LU a través de una lista con dos matrices L y U de NxN.
     
-    P, A_permutada = construir_P(A) #Consigo la P, y en caso de que P != I la A con la filas reordenadas
     m = A.shape[0]
     n = A.shape[1]
     
@@ -83,7 +82,7 @@ def calculaLU(A):
         print('Matriz no cuadrada')
         return
     
-    U = A_permutada # Comienza siendo una copia de A y deviene en U (triangulado superiormente)
+    U = A.copy() # Comienza siendo una copia de A y deviene en U (triangulado superiormente)
     L = np.identity(n)  # Parto desde una matriz identidad de dimension nxn, que va a mutar a L
     
     
@@ -93,7 +92,7 @@ def calculaLU(A):
             L[i,j] = U[i,j] / U[j,j]
             U[i,:] = U[i,:] - L[i,j] * U[j,:]
 
-    return L, U, P
+    return L, U
 
 
 
@@ -103,7 +102,7 @@ def inversa_por_lu(A):
     n = A.shape[0]
 
     # Realizamos la factorización LU de la matriz A
-    L, U, P = calculaLU(A)
+    L, U = calculaLU(A)
 
     # Inicializamos la matriz identidad I y la inversa
     I = np.eye(n)
@@ -115,7 +114,7 @@ def inversa_por_lu(A):
         b = I[:, i]  # La columna i de la identidad
 
         # Resolvemos L y U
-        y = scipy.linalg.solve_triangular(L, P @ b, lower=True)
+        y = scipy.linalg.solve_triangular(L, b, lower=True)
 
         x = scipy.linalg.solve_triangular(U, y)
 
