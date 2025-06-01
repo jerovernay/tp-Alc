@@ -155,7 +155,7 @@ def calcula_Cji(D, j , i): #Funcion auxiliar para calcular los casilleros Cji
         num = 1 / D[i,j] #defino el numerador ( F(dij) )
         den = 0
 
-        for k in range(0, N): #Armo la sumatoria del denominador
+        for k in range(0, N-1): #Armo la sumatoria del denominador
             if k!= i: 
                 den = den + (1 / D[i,k])
 
