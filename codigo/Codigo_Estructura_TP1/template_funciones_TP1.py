@@ -199,3 +199,7 @@ def nro_condicion_norma1(B):
     norma1_de_B_inv = np.linalg.norm(B_inv, 1)
 
     return norma1_de_B * norma1_de_B_inv
+
+#Funcion para calcular la norma 1
+def norma1(A):
+  return np.sum(np.abs(A))
