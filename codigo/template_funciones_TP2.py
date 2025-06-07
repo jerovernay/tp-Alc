@@ -92,7 +92,8 @@ def crearK (A):
     
     return K
 
-#Funciones TP 2
+
+                                                            # ======== Funciones TP 2 ======= #
 
 
 def A_sim(A):  # calculo para simetrizar red de adyacencia
@@ -105,10 +106,13 @@ def A_sim(A):  # calculo para simetrizar red de adyacencia
 
 
 
+
 def calcula_L(A): # L = K - A
     A = A_sim(A)
     K = crearK(A)
     return K - A
+
+
 
 
 def calcular_2E(A,n): # calculo de 2E a partir de sumatorias de casilleros de A
@@ -119,6 +123,8 @@ def calcular_2E(A,n): # calculo de 2E a partir de sumatorias de casilleros de A
         dosE += A[i,j]
 
     return dosE
+
+
 
 
 def crear_P(A,n):  # armado de P a partir de P[i,j] = (k[i] * k[j] ) / 2E
@@ -132,6 +138,8 @@ def crear_P(A,n):  # armado de P a partir de P[i,j] = (k[i] * k[j] ) / 2E
 
     return P
 
+
+
 def calcula_R(A): # R = A - P
     A = A_sim(A)
     n = A.shape[0]
@@ -139,20 +147,27 @@ def calcula_R(A): # R = A - P
 
     return A - P
 
+
+
 def calcula_Lambda(L,v):
     s = np.sign(v)           # s[i] = signos de la posicion i del autovector del segundo menor autovalor de L
 
     return 0.25 * s.T @ L @ s
+
+
 
 def calcula_Q(R,v):
     s = np.sign(v)          # s[i] = signos de la posicion i del autovector del mayor autovalor de R
 
     return s.T @ R @ s
 
+
+
+
 def metpot1(M, niter=10000, tol=1e-8 ):
     n = M.shape[0]
     v_sin_normalizar = np.random.uniform(-1, 1, size=n)
-    v = v_sin_normalizar / np.linalg.norm(v_sin_normalizar, 2)      #agarrmamos un vector para inicalizar el metodo
+    v = v_sin_normalizar / np.linalg.norm(v_sin_normalizar, 2)      #agarramamos un vector para inicalizar el metodo
 
     for i in range(niter):
       v_viejo = v.copy()
@@ -169,12 +184,16 @@ def metpot1(M, niter=10000, tol=1e-8 ):
 
     return autovalor_1 , autovector_1
 
+
+
 def deflaciona(M):
     a_1, v_1 = metpot1(M)
     v_1_norm_a_2 = v_1.T @ v_1
     M1 = M - a_1 * ( np.outer(v_1, v_1) / v_1_norm_a_2 ) # deflaciona M
 
     return M1 , a_1, v_1
+
+
 
 def metpotI(M, mu, niter=10000, tol=1e-8):
     n = M.shape[0]
@@ -184,9 +203,11 @@ def metpotI(M, mu, niter=10000, tol=1e-8):
     a, v = metpot1(Binv)      #aplicamos el metodo de la potencia a la inversa de B para obtener el autovalor de menor modulo de B y su autovector asociado
     return a, v
 
+
+
 def metpotI2(M, mu, niter=10000, tol=1e-8):
-     # Recibe la matriz A, y un valor mu y retorna el segundo autovalor y autovector de la matriz A,
-   # suponiendo que sus autovalores son positivos excepto por el menor que es igual a 0
+    # Recibe la matriz A, y un valor mu y retorna el segundo autovalor y autovector de la matriz A,
+    # suponiendo que sus autovalores son positivos excepto por el menor que es igual a 0
    # Retorna el segundo autovector, su autovalor, y si el metodo llegó a converger.
    n = M.shape[0]
    I = np.eye(n)
@@ -197,6 +218,8 @@ def metpotI2(M, mu, niter=10000, tol=1e-8):
    a = 1/a # Reobtenemos el autovalor correcto
    a -= mu
    return a, v
+
+
 
 
 def laplaciano_iterativo(A,niveles,nombres_s=None):
@@ -227,6 +250,8 @@ def laplaciano_iterativo(A,niveles,nombres_s=None):
                 laplaciano_iterativo(Am,niveles-1,
                                      nombres_s=[ni for ni,vi in zip(nombres_s,v_L) if vi < 0])
                 )
+
+
 
 def modularidad_iterativo(A=None,R=None,nombres_s=None):
     # Recibe una matriz A, una matriz R de modularidad, y los nombres de los nodos
