@@ -166,7 +166,7 @@ def calcula_Q(R,v):
 
 def metpot1(M, niter=10000, tol=1e-8 ):
     n = M.shape[0]
-    np.random.seed(np.random.int()) #fijamos el v para cada ejecucion 
+    np.random.seed(13) #fijamos el v para cada ejecucion 
     v_sin_normalizar = np.random.rand(n)
     v = v_sin_normalizar / np.linalg.norm(v_sin_normalizar, 2)      #agarramamos un vector para inicalizar el metodo
 
