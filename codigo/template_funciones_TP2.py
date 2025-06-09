@@ -15,8 +15,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd # Para leer archivos
 import geopandas as gpd # Para hacer cosas geográficas
-import seaborn as sns # Para hacer plots lindos
-import networkx as nx # Construcción de la red en NetworkX
 import scipy
 
 #Funciones TP1 
@@ -161,16 +159,19 @@ def calcula_Q(R,v):
 
     return s.T @ R @ s
 
-
-
-
-def metpot1(M, niter=10000, tol=1e-8 ):
-    n = M.shape[0]
+def generar_semilla(n):
+    
     v_sin_normalizar = np.random.uniform(-1, 1, size=n)
-    v = v_sin_normalizar / np.linalg.norm(v_sin_normalizar, 2)      #agarramamos un vector para inicalizar el metodo
+    semilla = v_sin_normalizar / np.linalg.norm(v_sin_normalizar, 2) 
+
+    return semilla
+
+
+def metpot1(M, semilla, niter=10000, tol=1e-8):
+
 
     for i in range(niter):
-      v_viejo = v.copy()
+      v_viejo = semilla.copy()
 
       Mv = M @ v_viejo
 
@@ -186,8 +187,8 @@ def metpot1(M, niter=10000, tol=1e-8 ):
 
 
 
-def deflaciona(M):
-    a_1, v_1 = metpot1(M)
+def deflaciona(M, semilla):
+    a_1, v_1 = metpot1(M, semilla)
     v_1_norm_a_2 = v_1.T @ v_1
     M1 = M - a_1 * ( np.outer(v_1, v_1) / v_1_norm_a_2 ) # deflaciona M
 
@@ -195,17 +196,17 @@ def deflaciona(M):
 
 
 
-def metpotI(M, mu, niter=10000, tol=1e-8):
+def metpotI(M, mu, semilla, niter=10000, tol=1e-8):
     n = M.shape[0]
     I = np.eye(n)
     B = M + mu * I       
     Binv = inversa_por_lu(B)
-    a, v = metpot1(Binv)      #aplicamos el metodo de la potencia a la inversa de B para obtener el autovalor de menor modulo de B y su autovector asociado
+    a, v = metpot1(Binv, semilla)      #aplicamos el metodo de la potencia a la inversa de B para obtener el autovalor de menor modulo de B y su autovector asociado
     return a, v
 
 
 
-def metpotI2(M, mu, niter=10000, tol=1e-8):
+def metpotI2(M, mu, semilla, niter=10000, tol=1e-8):
     # Recibe la matriz A, y un valor mu y retorna el segundo autovalor y autovector de la matriz A,
     # suponiendo que sus autovalores son positivos excepto por el menor que es igual a 0
    # Retorna el segundo autovector, su autovalor, y si el metodo llegó a converger.
@@ -213,8 +214,8 @@ def metpotI2(M, mu, niter=10000, tol=1e-8):
    I = np.eye(n)
    B = M + mu * I
    Binv = inversa_por_lu(B)
-   defBinv, _, _ = deflaciona(Binv) # Deflacionamos la inversa para obviar el autovalor de menor modulo y buscar el segundo
-   a, v =  metpot1(defBinv) # Buscamos su segundo autovector
+   defBinv, _, _ = deflaciona(Binv, semilla) # Deflacionamos la inversa para obviar el autovalor de menor modulo y buscar el segundo
+   a, v =  metpot1(defBinv, semilla) # Buscamos su segundo autovector
    a = 1/a # Reobtenemos el autovalor correcto
    a -= mu
    return a, v
@@ -222,7 +223,7 @@ def metpotI2(M, mu, niter=10000, tol=1e-8):
 
 
 
-def laplaciano_iterativo(A,niveles,nombres_s=None):
+def laplaciano_iterativo(A,niveles, semilla, nombres_s=None):
     # Recibe una matriz A, una cantidad de niveles sobre los que hacer cortes, y los nombres de los nodos
     # Retorna una lista con conjuntos de nodos representando las comunidades.
     # La función debe, recursivamente, ir realizando cortes y reduciendo en 1 el número de niveles hasta llegar a 0 y retornar.
@@ -232,7 +233,7 @@ def laplaciano_iterativo(A,niveles,nombres_s=None):
         return([nombres_s])
     else: # Sino:
         L = calcula_L(A) # Recalculamos el L
-        a_L, v_L = metpotI2(L, 0.5) # Encontramos el segundo autovector de L
+        a_L, v_L = metpotI2(L, 0.5, semilla) # Encontramos el segundo autovector de L
         s = np.sign(v_L)
         indices_pos = np.where(s >= 0)[0]
         indices_neg = np.where(s < 0)[0]
@@ -253,7 +254,7 @@ def laplaciano_iterativo(A,niveles,nombres_s=None):
 
 
 
-def modularidad_iterativo(A=None,R=None,nombres_s=None):
+def modularidad_iterativo(A,R, semilla,  nombres_s=None):
     # Recibe una matriz A, una matriz R de modularidad, y los nombres de los nodos
     # Retorna una lista con conjuntos de nodos representando las comunidades.
 
@@ -268,7 +269,7 @@ def modularidad_iterativo(A=None,R=None,nombres_s=None):
     if R.shape[0] == 1: # Si llegamos al último nivel
         return [nombres_s]
     else:
-        a,v = metpot1(R) # Primer autovector y autovalor de R
+        a,v = metpot1(R, semilla) # Primer autovector y autovalor de R
         s = np.sign(v)
         indices_pos = np.where(s >= 0)[0]
         indices_neg = np.where(s < 0)[0]
@@ -280,8 +281,8 @@ def modularidad_iterativo(A=None,R=None,nombres_s=None):
             ## Hacemos como con L, pero usando directamente R para poder mantener siempre la misma matriz de modularidad
             Rp = R[np.ix_(indices_pos, indices_pos)] # Parte de R asociada a los valores positivos de v
             Rm = R[np.ix_(indices_neg, indices_neg)] # Parte asociada a los valores negativos de v
-            ap,vp = metpot1(Rp) # autovector principal de Rp
-            am,vm = metpot1(Rm) # autovector principal de Rm
+            ap,vp = metpot1(Rp, semilla) # autovector principal de Rp
+            am,vm = metpot1(Rm, semilla) # autovector principal de Rm
 
             # Calculamos el cambio en Q que se produciría al hacer esta partición
             Q1 = 0
