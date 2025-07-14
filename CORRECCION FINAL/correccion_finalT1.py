@@ -202,11 +202,11 @@ def nro_condicion_norma1(B):
 
     B_inv = inversa_por_lu(B)
 
-    norma1_de_B = np.linalg.norm(B, 1)
-    norma1_de_B_inv = np.linalg.norm(B_inv, 1)
+    norma1_de_B = norma1(B, 1)
+    norma1_de_B_inv = norma1(B_inv, 1)
 
     return norma1_de_B * norma1_de_B_inv
 
 #Funcion para calcular la norma 1
 def norma1(A):
-  return np.sum(np.abs(A))
+    return np.max(np.sum(np.abs(A), axis=0))
