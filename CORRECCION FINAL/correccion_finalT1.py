@@ -202,8 +202,8 @@ def nro_condicion_norma1(B):
 
     B_inv = inversa_por_lu(B)
 
-    norma1_de_B = norma1(B, 1)
-    norma1_de_B_inv = norma1(B_inv, 1)
+    norma1_de_B = norma1(B)
+    norma1_de_B_inv = norma1(B_inv)
 
     return norma1_de_B * norma1_de_B_inv
 
