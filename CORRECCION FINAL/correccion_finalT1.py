@@ -175,6 +175,13 @@ def calcula_matriz_C_continua(D):
 
     return C
 
+def matriz_elevada(M,k):
+    res = np.eye(M.shape[0])
+    
+    for _ in range(k):
+        res = res @ M
+    return res
+
 def calcula_B(C,cantidad_de_visitas):
 
     # Recibe la matriz C de transiciones, y calcula la matriz B que representa la relación entre el total de visitas y el número inicial de visitantes
@@ -186,7 +193,7 @@ def calcula_B(C,cantidad_de_visitas):
     n = C.shape[0]
     B = np.eye(n)
     for k in range(1, cantidad_de_visitas):      # Comienza a iterar desde 1 porque B = I = C ^ 0
-        C_elevada_k = np.linalg.matrix_power(C,k)
+        C_elevada_k = matriz_elevada(C,k)
         B = B + C_elevada_k                       # Sumamos las matrices de transición para cada cantidad de pasos
     return B
 
